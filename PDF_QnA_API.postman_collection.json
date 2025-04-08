@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "b5f7b8d0-5f1a-4b2c-8e1d-9b9b9b9b9b9b",
+		"name": "PDF Q&A API",
+		"description": "Collection for testing PDF Q&A API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/health",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["health"]
+				}
+			}
+		},
+		{
+			"name": "Upload PDFs",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files",
+							"type": "file",
+							"src": [],
+							"description": "Select multiple PDF files"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/upload",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["upload"]
+				}
+			}
+		},
+		{
+			"name": "List Files",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/files",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["files"]
+				}
+			}
+		},
+		{
+			"name": "Query PDFs",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "question",
+							"value": "What is the main topic of the document?",
+							"type": "text",
+							"description": "Your question about the PDF content"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/query",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["query"]
+				}
+			}
+		},
+		{
+			"name": "Get QA History",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/qa-history",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["qa-history"]
+				}
+			}
+		},
+		{
+			"name": "Clear QA History",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/qa-history",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["qa-history"]
+				}
+			}
+		},
+		{
+			"name": "Delete File",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/files/example.pdf",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "8000",
+					"path": ["files", "example.pdf"]
+				},
+				"description": "Replace 'example.pdf' with the actual filename you want to delete"
+			}
+		}
+	]
+} 
