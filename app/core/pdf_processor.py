@@ -6,54 +6,64 @@ from app.core.logger import get_logger
 
 logger = get_logger(__name__)
 
-def process_pdf(file_path: str) -> str:
-    """
-    Process a single PDF file and extract its text content.
+class PDFProcessor:
+    """A class to handle PDF processing operations."""
     
-    Args:
-        file_path: Path to the PDF file
-        
-    Returns:
-        str: Extracted text from the PDF
-    """
-    logger.debug(f"Processing PDF file: {file_path}")
-    try:
-        reader = PdfReader(file_path)
-        text = ""
-        
-        for i, page in enumerate(reader.pages):
-            logger.debug(f"Processing page {i+1} of {len(reader.pages)}")
-            text += page.extract_text() + "\n"
-        
-        logger.info(f"Successfully processed PDF file: {file_path}")
-        return text
-    except Exception as e:
-        logger.error(f"Error processing PDF file {file_path}: {str(e)}")
-        raise
-
-def get_all_pdf_content(directory: Path) -> str:
-    """
-    Get combined content from all PDF files in the specified directory.
+    def __init__(self):
+        """Initialize the PDF processor."""
+        logger.debug("PDFProcessor initialized")
     
-    Args:
-        directory: Path to directory containing PDF files
+    def process_pdf(self, file_path: str) -> str:
+        """
+        Process a single PDF file and extract its text content.
         
-    Returns:
-        str: Combined text from all PDFs, with clear separation between files
-    """
-    logger.debug(f"Scanning directory for PDFs: {directory}")
-    all_content = []
-    
-    pdf_files = list(directory.glob("*.pdf"))
-    logger.info(f"Found {len(pdf_files)} PDF files in directory")
-    
-    for pdf_file in pdf_files:
+        Args:
+            file_path: Path to the PDF file
+            
+        Returns:
+            str: Extracted text from the PDF
+        """
+        logger.debug(f"Processing PDF file: {file_path}")
         try:
-            logger.debug(f"Processing file: {pdf_file.name}")
-            content = process_pdf(str(pdf_file))
-            all_content.append(f"[File: {pdf_file.name}]\n{content}\n")
+            reader = PdfReader(file_path)
+            text = ""
+            
+            for i, page in enumerate(reader.pages):
+                logger.debug(f"Processing page {i+1} of {len(reader.pages)}")
+                text += page.extract_text() + "\n"
+            
+            logger.info(f"Successfully processed PDF file: {file_path}")
+            return text
         except Exception as e:
-            logger.error(f"Error processing {pdf_file}: {str(e)}")
-            continue
+            logger.error(f"Error processing PDF file {file_path}: {str(e)}")
+            raise
     
-    return "\n---\n".join(all_content) 
+    def get_all_pdf_content(self, directory: Path) -> str:
+        """
+        Get combined content from all PDF files in the specified directory.
+        
+        Args:
+            directory: Path to directory containing PDF files
+            
+        Returns:
+            str: Combined text from all PDFs, with clear separation between files
+        """
+        logger.debug(f"Scanning directory for PDFs: {directory}")
+        all_content = []
+        
+        pdf_files = list(directory.glob("*.pdf"))
+        logger.info(f"Found {len(pdf_files)} PDF files in directory")
+        
+        for pdf_file in pdf_files:
+            try:
+                logger.debug(f"Processing file: {pdf_file.name}")
+                content = self.process_pdf(str(pdf_file))
+                all_content.append(f"[File: {pdf_file.name}]\n{content}\n")
+            except Exception as e:
+                logger.error(f"Error processing {pdf_file}: {str(e)}")
+                continue
+        
+        return "\n---\n".join(all_content)
+
+# Create a global instance
+pdf_processor = PDFProcessor() 

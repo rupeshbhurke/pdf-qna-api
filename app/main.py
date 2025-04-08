@@ -4,8 +4,8 @@ from fastapi.responses import JSONResponse
 from typing import Optional, List
 import os
 from pathlib import Path
-from app.core.qa_chain import create_qa_chain
-from app.core.pdf_processor import process_pdf, get_all_pdf_content
+from app.core.qa_chain import QAChain
+from app.core.pdf_processor import pdf_processor
 from app.core.qa_storage import qa_storage
 from app.models.qa_history import QAHistoryResponse
 from app.core.logger import get_logger
@@ -77,7 +77,7 @@ async def query_pdfs(question: str = Form(...)):
     logger.info(f"Received question: {question}")
     
     # Get content from all stored PDFs
-    all_content = get_all_pdf_content(STORAGE_DIR)
+    all_content = pdf_processor.get_all_pdf_content(STORAGE_DIR)
     
     if not all_content:
         logger.error("No PDF files found to analyze")
@@ -85,11 +85,11 @@ async def query_pdfs(question: str = Form(...)):
     
     # Create QA chain with combined content
     logger.debug("Creating QA chain")
-    qa_chain = create_qa_chain(all_content)
+    qa_chain = QAChain(all_content)
     
     # Get answer
     logger.debug("Generating answer")
-    response = qa_chain.invoke({"question": question})
+    response = qa_chain.get_answer(question)
     
     # Get list of files used in the response
     source_files = [file.name for file in STORAGE_DIR.glob("*.pdf")]
